@@ -22,7 +22,7 @@ import org.apache.commons.codec.binary.Hex;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements TransactionEvents {
 
     // Used to load the 'fclient2' library on application startup.
     static {
@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     ActivityResultLauncher activityResultLauncher;
+    private String pin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +64,12 @@ public class MainActivity extends AppCompatActivity {
                         if (result.getResultCode() == Activity.RESULT_OK) {
                             Intent data = result.getData();
                             // обработка результата
-                            String pin = data.getStringExtra("pin");
-                            Toast.makeText(MainActivity.this, pin, Toast.LENGTH_SHORT).show();
+                            //String pin = data.getStringExtra("pin");
+                            //Toast.makeText(MainActivity.this, pin, Toast.LENGTH_SHORT).show();
+                            pin = data.getStringExtra("pin");
+                            synchronized (MainActivity.this) {
+                                MainActivity.this.notifyAll();
+                            }
                         }
                     }
                 });
@@ -80,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
     public static native byte[] randomBytes(int no);
     public static native byte[] encrypt(byte[] key, byte[] data);
     public static native byte[] decrypt(byte[] key, byte[] data);
+    public native boolean transaction(byte[] trd);
     public static byte[] stringToHex(String s)
     {
         byte[] hex;
@@ -95,7 +101,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onButtonClick(View view) {
-        Intent it = new Intent(this, PinpadActivity.class);
-        activityResultLauncher.launch(it);
+//        Intent it = new Intent(this, PinpadActivity.class);
+//        activityResultLauncher.launch(it);
+        byte[] trd = stringToHex("9F0206000000000100");
+        transaction(trd);
+    }
+
+    @Override
+    public String enterPin(int ptc, String amount) {
+        pin = new String();
+        Intent it = new Intent(MainActivity.this, PinpadActivity.class);
+        it.putExtra("ptc", ptc);
+        it.putExtra("amount", amount);
+        synchronized (MainActivity.this) {
+            activityResultLauncher.launch(it);
+            try {
+                MainActivity.this.wait();
+            } catch (Exception ex) {
+                //todo: log error
+            }
+        }
+        return pin;
+    }
+
+    @Override
+    public void transactionResult(boolean result) {
+        runOnUiThread(()-> {
+            Toast.makeText(MainActivity.this, result ? "ok" : "failed", Toast.LENGTH_SHORT).show();
+        });
     }
 }
