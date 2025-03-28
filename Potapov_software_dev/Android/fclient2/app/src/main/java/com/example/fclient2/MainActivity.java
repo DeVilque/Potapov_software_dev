@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements TransactionEvents
         new Thread(() -> {
             try {
                 HttpURLConnection uc = (HttpURLConnection)
-                        (new URL("http://192.168.1.9:8080/api/v1/title").openConnection());
+                        (new URL("http://192.168.161.147:8080/api/v1/title").openConnection());
                 InputStream inputStream = uc.getInputStream();
                 String html = IOUtils.toString(inputStream);
                 String title = getPageTitle(html);
