@@ -1,5 +1,6 @@
 package ru.iu3.backend.controllers;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import ru.iu3.backend.models.Country;
 import ru.iu3.backend.repositories.MuseumRepository;
 import ru.iu3.backend.repositories.UserRepository;
 import ru.iu3.backend.repositories.CountryRepository;
+import ru.iu3.backend.tools.View;
 
 
 import java.util.*;
@@ -27,6 +29,7 @@ public class UserController {
     @Autowired
     MuseumRepository museumRepository;
 
+    @JsonView(View.REST.class)
     @GetMapping("/users")
     public List
     getAllUsers() {
@@ -124,4 +127,5 @@ public class UserController {
             resp.put("deleted", Boolean.FALSE);
         return ResponseEntity.ok(resp);
     }
+
 }

@@ -1,7 +1,10 @@
 package ru.iu3.backend.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
+import ru.iu3.backend.controllers.LoginController;
+import ru.iu3.backend.tools.View;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -20,12 +23,15 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView({View.REST.class})
     @Column(name = "id", updatable = false, nullable = false)
     public long id;
 
+    @JsonView({View.REST.class})
     @Column(name = "login")
     public String login;
 
+    @JsonView({View.REST.class})
     @Column(name = "email")
     public String email;
 
@@ -37,12 +43,16 @@ public class User {
     @Column(name = "salt")
     public String salt;
 
+//    @JsonIgnore
+    @JsonView(View.LOGIN.class)
     @Column(name = "token")
     public String token;
 
+    @JsonView({View.REST.class})
     @Column(name = "activity")
     public LocalDateTime activity;
 
+    @JsonView({View.REST.class})
     @ManyToMany(mappedBy = "users")
     public Set<Museum> museums = new HashSet<>();
 
