@@ -21,17 +21,17 @@ public class User {
         this.id = id;
     }
 
+    @Transient
+    public String np;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView({View.REST.class})
     @Column(name = "id", updatable = false, nullable = false)
     public long id;
 
-    @JsonView({View.REST.class})
     @Column(name = "login")
     public String login;
 
-    @JsonView({View.REST.class})
     @Column(name = "email")
     public String email;
 
@@ -44,15 +44,12 @@ public class User {
     public String salt;
 
 //    @JsonIgnore
-    @JsonView(View.LOGIN.class)
     @Column(name = "token")
     public String token;
 
-    @JsonView({View.REST.class})
     @Column(name = "activity")
     public LocalDateTime activity;
 
-    @JsonView({View.REST.class})
     @ManyToMany(mappedBy = "users")
     public Set<Museum> museums = new HashSet<>();
 

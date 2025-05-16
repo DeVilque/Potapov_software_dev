@@ -46,8 +46,8 @@ class BackendService {
             
     /* Countries */
 
-    retrieveAllCountries(page, limit) {
-        return axios.get(`${API_URL}/countries`);
+    retrieveAllCountries(page=0, limit) {
+        return axios.get(`${API_URL}/countries?page=${page}&limit=${limit}`);
     }
 
     retrieveCountry(id) {
@@ -64,6 +64,51 @@ class BackendService {
 
     deleteCountries(countries) {
         return axios.post(`${API_URL}/deletecountries`, countries);
+    }
+
+    /* Artists */
+
+    retrieveAllArtists(page, limit) {
+        return axios.get(`${API_URL}/artists?page=${page}&limit=${limit}`);
+    }
+
+    retrieveArtist(id) {
+        return axios.get(`${API_URL}/artists/${id}`);
+    }
+
+    createArtist(artist) {
+        return axios.post(`${API_URL}/artists`, artist);
+    }
+
+    updateArtist(artist) {
+        return axios.put(`${API_URL}/artists/${artist.id}`, artist);
+    }
+
+    deleteArtists(artists) {
+        return axios.post(`${API_URL}/deleteartists`, artists);
+    }
+
+
+    /* Users */
+
+    retrieveAllUsers(page=0, limit) {
+        return axios.get(`${API_URL}/users?page=${page}&limit=${limit}`);
+    }
+
+    retrieveUser(id) {
+        return axios.get(`${API_URL}/users/${id}`);
+    }
+
+    createUser(user) {
+        return axios.post(`${API_URL}/users`, user);
+    }
+
+    updateUser(user) {
+        return axios.put(`${API_URL}/users/${user.id}`, user);
+    }
+
+    deleteUsers(users) {
+        return axios.post(`${API_URL}/deleteusers`, users);
     }
 }
 

@@ -9,6 +9,9 @@ import Home from "./components/Home";
 import Login from "./components/Login";
 import Utils from "./utils/Utils";
 import { connect } from 'react-redux'
+import MyAccountComponent from './components/MyAccountComponent';
+import UserComponent from './components/UserComponent';
+import UserListComponent from './components/UserListComponent';
 
 const ProtectedRoute = ({children}) => {
     let user = Utils.getUser();
@@ -32,6 +35,9 @@ const App = props => {
                                     <Route path="home" element={<ProtectedRoute><Home/></ProtectedRoute>}/>
                                     <Route path="countries" element={<ProtectedRoute><CountryListComponent/></ProtectedRoute>}/>
                                     <Route path="countries/:id" element={<ProtectedRoute><CountryComponent /></ProtectedRoute>}/>
+                                    <Route path="users" element={<ProtectedRoute><UserListComponent/></ProtectedRoute>}/>
+                                    <Route path="users/:id" element={<ProtectedRoute><UserComponent /></ProtectedRoute>}/>
+                                    <Route path="users/me" element={<ProtectedRoute><MyAccountComponent /></ProtectedRoute>}/>
                                 </Routes>
                             </div>
                         </div>
