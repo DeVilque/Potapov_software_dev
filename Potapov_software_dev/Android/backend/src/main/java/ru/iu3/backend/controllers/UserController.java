@@ -17,6 +17,7 @@ import ru.iu3.backend.tools.View;
 
 import java.util.*;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/v1")
 public class UserController {

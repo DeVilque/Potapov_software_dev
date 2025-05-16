@@ -3,9 +3,6 @@ import { combineReducers, createStore, applyMiddleware } from 'redux';
 import { createLogger } from 'redux-logger'
 
 
-
-
-
 /* ACTIONS */
 
 const userConstants = {
