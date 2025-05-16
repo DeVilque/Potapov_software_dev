@@ -4,7 +4,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHome, faUser } from '@fortawesome/free-solid-svg-icons'
 import { Link, useNavigate } from 'react-router-dom';
 import Utils from '../utils/Utils';
+import { userActions } from '../utils/Rdx';
 import BackendService from '../services/BackendService';
+import {connect} from 'react-redux';
 
 class NavigationBarClass extends React.Component {
 
@@ -21,7 +23,8 @@ class NavigationBarClass extends React.Component {
     logout() {
         BackendService.logout().then(() => {
             Utils.removeUser();
-            this.goHome()
+            this.props.dispatch(userActions.logout())
+            this.props.navigate('Login');
         });
     }
 
@@ -35,19 +38,24 @@ class NavigationBarClass extends React.Component {
                 <Nav className="me-auto">
                     <Nav.Link as={Link} to="/home">Home</Nav.Link>
                     <Nav.Link onClick={this.goHome}>Another Home</Nav.Link>
-                    <Nav.Link onClick={() =>{ this.props.navigate("\home")}}>Yet Another Home</Nav.Link>
+                    <Nav.Link onClick={() =>{ this.props.navigate("\\home")}}>Yet Another Home</Nav.Link>
                 </Nav>
                 <Navbar.Text>{uname}</Navbar.Text>
                 { uname &&
                 <Nav.Link onClick={this.logout}><FontAwesomeIcon icon={faUser} fixedWidth />{' '}Выход</Nav.Link>
                 }
                 { !uname &&
-                <Nav.Link as={Link} to="/login"><FontAwesomeIcon icon={faUser} fixedWidth />{' '}Вход</Nav.Link>
+                <Nav.Link as={Link} to="/login"><FontAwesomeIcon icon={faUser} fixedWidth />{' '}Вход{' '}</Nav.Link>
                 }
             </Navbar.Collapse>
         </Navbar>
         );
     }
+}
+
+const mapStateToProps = state => {
+    const { user } = state.authentication;
+    return { user };
 }
 
 const NavigationBar = props => {
@@ -56,4 +64,4 @@ const NavigationBar = props => {
     return <NavigationBarClass navigate={navigate} {...props} />
 }
 
-export default  NavigationBar;
+export default connect(mapStateToProps)(NavigationBar);
